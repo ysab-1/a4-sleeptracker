@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { LocalNotifications } from '@capacitor/local-notifications'
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,44 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 })
 export class AppComponent {
   constructor() {}
+
+  async ngOnInit() {
+    await this.scheduleSleepNotifications();
+  }
+
+  async scheduleSleepNotifications() {
+    try {
+      // Request permission to display notifications
+      const permStatus = await LocalNotifications.requestPermissions();
+      if (permStatus.display === 'granted') {
+        await LocalNotifications.schedule({
+          notifications: [
+            {
+              title: 'Sleep Tracker',
+              body: 'Good morning! Make sure to log your sleep from last night.',
+              id: 1,
+              schedule: { on: { hour: 8, minute: 0 } },
+              sound: undefined,
+            },
+            {
+              title: 'Sleep Tracker',
+              body: 'Good afternoon! Feeling sleepy? Make sure to log it!',
+              id: 2,
+              schedule: { on: { hour: 13, minute: 0 } },
+              sound: undefined,
+            },
+            {
+              title: 'Sleep Tracker',
+              body: 'Good evening! Feeling sleepy? Make sure to log it!',
+              id: 3,
+              schedule: { on: { hour: 20, minute: 0 } },
+              sound: undefined,
+            },
+          ],
+        });
+      }
+    } catch (e) {
+      console.log('Local notifications are running in a browser environment or unavailable.', e);
+    }
+  }
 }
