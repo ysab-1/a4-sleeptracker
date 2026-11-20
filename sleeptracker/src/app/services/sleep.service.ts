@@ -39,12 +39,31 @@ export class SleepService {
 	}
 
 	public logOvernightData(sleepData:OvernightSleepData) {
-		SleepService.AllSleepData.push(sleepData);
-		SleepService.AllOvernightData.push(sleepData);
+		SleepService.AllSleepData.unshift(sleepData);
+		SleepService.AllOvernightData.unshift(sleepData);
 	}
 
 	public logSleepinessData(sleepData:StanfordSleepinessData) {
-		SleepService.AllSleepData.push(sleepData);
-		SleepService.AllSleepinessData.push(sleepData);
+		SleepService.AllSleepData.unshift(sleepData);
+		SleepService.AllSleepinessData.unshift(sleepData);
 	}
+
+	public getAllOvernightData(): OvernightSleepData[] {
+		return SleepService.AllOvernightData;
+	}
+
+	public getAllSleepinessData(): StanfordSleepinessData[] {
+		return SleepService.AllSleepinessData;
+	}
+
+	public deleteOvernightData(id: string) {
+		SleepService.AllOvernightData = SleepService.AllOvernightData.filter(d => d.id !== id);
+		SleepService.AllSleepData = SleepService.AllSleepData.filter(d => d.id !== id);
+	}
+
+	public deleteSleepinessData(id: string) {
+		SleepService.AllSleepinessData = SleepService.AllSleepinessData.filter(d => d.id !== id);
+		SleepService.AllSleepData = SleepService.AllSleepData.filter(d => d.id !== id);
+	}
+		
 }
