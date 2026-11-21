@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Log Sleep</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" [strong]="true">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item class="dark-stat-card">
+    <ion-label position="stacked">Sleep Start</ion-label>
+    <ion-datetime-button datetime="startTime"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="startTime" presentation="date-time" [(ngModel)]="sleepStart"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+
+  <ion-item class="dark-stat-card ion-margin-top">
+    <ion-label position="stacked">Sleep End</ion-label>
+    <ion-datetime-button datetime="endTime"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="endTime" presentation="date-time" [(ngModel)]="sleepEnd"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+</ion-content>
