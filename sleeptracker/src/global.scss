@@ -35,3 +35,98 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/**
+ * Custom Typography: IBM Plex Sans & IBM Plex Mono
+ * -----------------------------------------------------
+ */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+* {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
+code, pre, .mono-font {
+  font-family: 'IBM Plex Mono', monospace !important;
+}
+
+/**
+ * Global App & Card Styling
+ * -----------------------------------------------------
+ */
+body {
+  --ion-background-color: #0b1120;
+  --ion-text-color: #f8fafc;
+}
+
+.sleep-highlight-card {
+  background: #ffc409;
+  color: #0b1120;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 25px rgba(255, 196, 9, 0.15);
+  cursor: pointer;
+  
+  h2, h3, p {
+    color: #0b1120 !important;
+  }
+
+  .sleep-duration {
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin: 8px 0;
+  }
+}
+
+.dark-stat-card {
+  background: #131b2e;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #f8fafc;
+    margin-top: 4px;
+  }
+  
+  .stat-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+}
+
+.custom-segment {
+  background: #131b2e;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  
+  ion-segment-button {
+    --color: #94a3b8;
+    --color-checked: #0b1120;
+    --indicator-color: #ffc409;
+    font-weight: 500;
+  }
+}
+
+/**
+ * Button Pulse Animation (For clickable buttons without distinct states)
+* -----------------------------------------------------
+ */
+@keyframes subtlePulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 196, 9, 0.4); }
+  70% { transform: scale(1.02); box-shadow: 0 0 0 6px rgba(255, 196, 9, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 196, 9, 0); }
+}
+
+ion-button:not([fill="clear"]) {
+  animation: subtlePulse 3s infinite ease-in-out;
+  transition: transform 0.2s ease;
+}
+
+ion-button:active {
+  transform: scale(0.97);
+}
