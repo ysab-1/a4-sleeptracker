@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Log Sleepiness</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="save()" [strong]="true">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p class="stat-label">Select current sleepiness level (1–7):</p>
+  
+  <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+    <ion-button *For="let desc of scaleValues.slice(1); let i = index" 
+                [fill]="selectedLevel === (i + 1) ? 'solid' : 'outline'"
+                color="primary"
+                (click)="selectedLevel = i + 1"
+                style="text-align: left; height: auto; padding: 10px;">
+      <strong>Level {{ i + 1 }}:</strong> &nbsp; {{ desc }}
+    </ion-button>
+  </div>
+
+  <ion-item class="dark-stat-card">
+    <ion-input label="Notes (optional)" labelPlacement="stacked" [(ngModel)]="notes" placeholder="e.g. Working on project"></ion-input>
+  </ion-item>
+</ion-content>

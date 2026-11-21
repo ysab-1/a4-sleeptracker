@@ -1,0 +1,45 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Sleep Data</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openLogSleepModal()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Segment Switcher -->
+  <ion-segment [(ngModel)]="sleepSegment" mode="ios" class="custom-segment">
+    <ion-segment-button value="week">
+      <ion-label>Week</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="day">
+      <ion-label>Day</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Weekly Summary View -->
+  <div *ngIf="sleepSegment === 'week'" class="dark-stat-card ion-text-center">
+    <h2 class="mono-font stat-value" style="font-size: 2rem;">8.0 hrs</h2>
+    <p class="stat-label">Average nightly sleep</p>
+  </div>
+
+  <!-- Overnight History List -->
+  <div class="history-list ion-margin-top">
+    <h3>Overnight History</h3>
+    <ion-card *ngFor="let item of overnightLogs" class="dark-stat-card">
+      <ion-card-content>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="mono-font stat-value" style="font-size: 1.2rem;">{{ item.summaryString() }}</span>
+          <span class="stat-label">{{ item.sleepStart | date:'mediumDate' }}</span>
+        </div>
+        <div class="stat-label" style="margin-top: 8px;">
+          <ion-icon name="moon-outline"></ion-icon> {{ item.sleepStart | date:'shortTime' }} &nbsp;&nbsp;
+          <ion-icon name="sunny-outline"></ion-icon> {{ item.sleepEnd | date:'shortTime' }}
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
