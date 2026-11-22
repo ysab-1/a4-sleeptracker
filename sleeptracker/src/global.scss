@@ -130,3 +130,27 @@ ion-button:not([fill="clear"]) {
 ion-button:active {
   transform: scale(0.97);
 }
+
+/**
+ * Styling for Undo Toast Popups
+ * -----------------------------------------------------
+ */
+
+.ion-toast {
+  --background: #131b2e;
+  --color: #f8fafc;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  font-family: 'IBM Plex Sans', sans-serif;
+  
+  ::slotted(.toast-button) {
+    color: #ffc409 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  ::slotted(.toast-message) {
+    white-space: pre-line;
+    font-weight: 500;
+  }
+}
