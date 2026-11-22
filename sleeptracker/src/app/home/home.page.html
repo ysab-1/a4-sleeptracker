@@ -1,20 +1,60 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <div style="margin-bottom: 20px;">
+      <p class="stat-label">{{ currentDate }}</p>
+      <h1 style="font-weight: 600; font-size: 1.8rem; margin: 4px 0 0 0;">Good evening</h1>
+    </div>
+
+    <div class="sleep-highlight-card" (click)="openLogSleepModal()">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Last Night's Sleep</span>
+        <ion-icon name="moon" style="font-size: 1.4rem;"></ion-icon>
+      </div>
+      
+      <div *ngIf="lastNightSleep">
+        <div class="sleep-duration mono-font">{{ lastNightSleep.summaryString() }}</div>
+        <p style="margin: 0; font-size: 0.9rem; opacity: 0.85;">
+          {{ lastNightSleep.sleepStart | date:'shortTime' }} – {{ lastNightSleep.sleepEnd | date:'shortTime' }}
+        </p>
+      </div>
+      <div *ngIf="!lastNightSleep">
+        <div class="sleep-duration mono-font">No sleep logged</div>
+        <p style="margin: 0; font-size: 0.9rem;">Tap here to log your sleep</p>
+      </div>
+    </div>
+
+    <div class="dark-stat-card">
+      <div class="stat-label">Weekly Average</div>
+      <div class="stat-value mono-font">8.0 hrs / night</div>
+    </div>
+
+    <div class="dark-stat-card">
+      <div class="stat-label">Sleep Consistency</div>
+      <div class="stat-value mono-font">92% On Track</div>
+    </div>
+
+    <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px;">
+      <ion-button expand="block" color="primary" (click)="openLogSleepModal()" style="font-weight: 600;">
+        <ion-icon name="moon-outline" slot="start"></ion-icon>
+        Log Overnight Sleep
+      </ion-button>
+      
+      <ion-button expand="block" fill="outline" color="primary" (click)="openLogSleepinessModal()" style="font-weight: 600;">
+        <ion-icon name="flash-outline" slot="start"></ion-icon>
+        Check Sleepiness Scale
+      </ion-button>
+    </div>
   </div>
 </ion-content>
