@@ -7,6 +7,7 @@ import { OvernightSleepData } from '../data/overnight-sleep-data';
 import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
 import { LogSleepModalComponent } from '../modals/log-sleep-modal.component';
 import { LogSleepinessModalComponent } from '../modals/log-sleepiness-modal.component';
+import { ToastController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { LogSleepinessModalComponent } from '../modals/log-sleepiness-modal.comp
 export class HomePage {
 	currentDate: string = '';
 
-  	constructor(public sleepService:SleepService, private modalCtrl: ModalController) {}
+  	constructor(public sleepService:SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController) {}
 
 	ngOnInit() {
 		console.log(this.allSleepData);
@@ -63,5 +64,37 @@ export class HomePage {
     if (data) {
       this.sleepService.logSleepinessData(data);
     }
+  }
+
+  async presentSleepEditedToast(updatedData: OvernightSleepData, oldSnapshot: OvernightSleepData) {
+    const toast = await this.toastCtrl.create({
+      message: 'Sleep log has been edited!\nTap to undo.',
+      duration: 4000,
+      position: 'bottom',
+      buttons: [{
+        text: 'Undo',
+        role: 'cancel',
+        handler: () => {
+          this.sleepService.updateOvernightData(oldSnapshot);
+        }
+      }]
+    });
+    await toast.present();
+  }
+
+  async presentSleepinessLoggedToast(newData: StanfordSleepinessData) {
+    const toast = await this.toastCtrl.create({
+      message: 'Sleepiness has been logged!\nTap to undo.',
+      duration: 4000,
+      position: 'bottom',
+      buttons: [{
+        text: 'Undo',
+        role: 'cancel',
+        handler: () => {
+          this.sleepService.deleteSleepinessData(newData.id);
+        }
+      }]
+    });
+    await toast.present();
   }
 }
