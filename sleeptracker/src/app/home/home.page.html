@@ -26,7 +26,7 @@
       <div *ngIf="lastNightSleep">
         <div class="sleep-duration mono-font">{{ lastNightSleep.summaryString() }}</div>
         <p style="margin: 0; font-size: 0.9rem; opacity: 0.85;">
-          {{ lastNightSleep.sleepStart | date:'shortTime' }} – {{ lastNightSleep.sleepEnd | date:'shortTime' }}
+          {{ lastNightSleep?.sleepStart | date:'shortTime' }} – {{ lastNightSleep?.sleepEnd | date:'shortTime' }}
         </p>
       </div>
       <div *ngIf="!lastNightSleep">

@@ -14,7 +14,7 @@
   <p class="stat-label">Select current sleepiness level (1–7):</p>
   
   <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-    <ion-button *For="let desc of scaleValues.slice(1); let i = index" 
+    <ion-button *ngFor="let desc of scaleValues.slice(1); let i = index" 
                 [fill]="selectedLevel === (i + 1) ? 'solid' : 'outline'"
                 color="primary"
                 (click)="selectedLevel = i + 1"
