@@ -14,7 +14,7 @@ import { ToastController } from '@ionic/angular/standalone';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent,  IonIcon, IonButton, ModalController],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent,  IonIcon, IonButton],
 })
 export class HomePage {
 	currentDate: string = '';

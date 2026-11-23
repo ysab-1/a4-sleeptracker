@@ -10,7 +10,6 @@ import { ToastController } from '@ionic/angular/standalone';
 @Component({
   selector: 'app-sleep',
   templateUrl: './sleep.page.html',
-  styleUrls: ['./sleep.page.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule]
 })
