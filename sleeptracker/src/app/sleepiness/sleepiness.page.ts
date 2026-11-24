@@ -76,21 +76,40 @@ export class SleepinessPage implements OnInit {
     const { data } = await modal.onDidDismiss();
 
     if (data) {
-      SleepService.AllSleepData.push(data);
+      const newLog = data.updated || data;
+
+      if (newLog) {
+        SleepService.AllSleepData.push(newLog);
+      }
       
       this.loadTodaySleepiness();
     }
   }
 
-  async openEditSleepinessModal(log: StanfordSleepinessData) {
+  async openEditSleepinessModal(logEntry: StanfordSleepinessData) {
     const modal = await this.modalCtrl.create({
       component: LogSleepinessModalComponent,
-      componentProps: { existingData: log }
+      componentProps: { existingData: logEntry }
     });
     await modal.present();
+
     const { data } = await modal.onDidDismiss();
+
     if (data) {
+      const updatedLog = data.updated || data;
+      const originalLog = data.original || logEntry;
+
+      if (updatedLog) {
+        const index = SleepService.AllSleepData.indexOf(originalLog);
+        if (index > -1) {
+          SleepService.AllSleepData[index] = updatedLog;
+        } else {
+          SleepService.AllSleepData.push(updatedLog);
+        }
+      }
+
       this.loadTodaySleepiness();
+      this.cdr.detectChanges();
     }
   }
 

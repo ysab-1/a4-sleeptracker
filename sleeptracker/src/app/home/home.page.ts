@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, ModalController } from '@ionic/angular/standalone';
 import { SleepService } from '../services/sleep.service';
@@ -19,7 +19,7 @@ import { ToastController } from '@ionic/angular/standalone';
 export class HomePage implements OnInit {
   currentDate: string = '';
 
-  constructor(public sleepService: SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController) {}
+  constructor(public sleepService: SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.setCurrentDate();
@@ -71,10 +71,18 @@ export class HomePage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: LogSleepinessModalComponent,
     });
+    
     await modal.present();
+
     const { data } = await modal.onDidDismiss();
+
     if (data) {
-      this.sleepService.logSleepinessData(data);
+      const newLog = data.updated || data;
+      if (newLog) {
+        SleepService.AllSleepData.push(newLog);
+      }
+
+      this.cdr.detectChanges();
     }
   }
 
