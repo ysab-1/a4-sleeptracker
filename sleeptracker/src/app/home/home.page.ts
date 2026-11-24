@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton, ModalController } from '@ionic/angular/standalone';
 import { SleepService } from '../services/sleep.service';
@@ -14,34 +14,43 @@ import { ToastController } from '@ionic/angular/standalone';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent,  IonIcon, IonButton],
+  imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonButton],
 })
-export class HomePage {
-	currentDate: string = '';
+export class HomePage implements OnInit {
+  currentDate: string = '';
 
-  	constructor(public sleepService:SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController) {}
+  constructor(public sleepService: SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController) {}
 
-	ngOnInit() {
-		console.log(this.allSleepData);
-		this.setCurrentDate();
-	}
+  ngOnInit() {
+    this.setCurrentDate();
+  }
 
-	ionViewWillEnter() {
+  ionViewWillEnter() {
     // Refreshes data dynamically when navigating back to the home page tab
-    }
+  }
 
-	setCurrentDate() {
-		const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'short', day: 'numeric' };
-		this.currentDate = new Date().toLocaleDateString('en-US', options);
-	}
-	/* Ionic doesn't allow bindings to static variables, so this getter can be used instead. */
-	get allSleepData() {
-		return SleepService.AllSleepData;
-	}
+  setCurrentDate() {
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+    this.currentDate = new Date().toLocaleDateString('en-US', options).toUpperCase();
+  }
 
-	get lastNightSleep(): OvernightSleepData | null {
+  /* Ionic doesn't allow bindings to static variables, so this getter can be used instead. */
+  get allSleepData() {
+    return SleepService.AllSleepData;
+  }
+
+  get lastNightSleep(): OvernightSleepData | null {
     const overnightLogs = SleepService.AllOvernightData;
     return overnightLogs.length > 0 ? overnightLogs[0] : null;
+  }
+
+  get todaySleepinessLogs(): StanfordSleepinessData[] {
+    const allSleepiness = SleepService.AllSleepData.filter(entry => entry instanceof StanfordSleepinessData) as StanfordSleepinessData[];
+    const today = new Date().toDateString();
+    return allSleepiness.filter(log => {
+      const logDate = log.loggedAt ? new Date(log.loggedAt) : new Date();
+      return logDate.toDateString() === today;
+    });
   }
 
   async openLogSleepModal() {
@@ -90,11 +99,27 @@ export class HomePage {
       buttons: [{
         text: 'Undo',
         role: 'cancel',
-        handler: () => {
-          this.sleepService.deleteSleepinessData(newData.id);
-        }
+        handler: () => { }
       }]
     });
     await toast.present();
+  }
+
+  get consistencyValue(): string {
+    const allSleep = SleepService.AllSleepData;
+    const overnightLogs = allSleep.filter(entry => entry instanceof OvernightSleepData) as OvernightSleepData[];
+    
+    const now = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(now.getDate() - 7);
+
+    const uniqueDaysLogged = new Set(
+      overnightLogs
+        .filter(log => new Date(log.sleepStart) >= sevenDaysAgo)
+        .map(log => new Date(log.sleepStart).toDateString())
+    );
+
+    const percentage = Math.round((uniqueDaysLogged.size / 7) * 100);
+    return `${percentage}%`;
   }
 }

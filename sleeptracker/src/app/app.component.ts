@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { addIcons } from 'ionicons';
-import { moonOutline, home, flashOutline, moon, add, sunnyOutline } from 'ionicons/icons';
+import { moonOutline, home, flashOutline, flash, moon, add, sunnyOutline } from 'ionicons/icons';
 
 addIcons({
   'moon-outline': moonOutline,
   'home': home,
   'flash-outline': flashOutline,
+  'flash': flash,
   'moon': moon,
   'add': add,
   'sunny-outline': sunnyOutline

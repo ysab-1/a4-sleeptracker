@@ -4,57 +4,95 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Dashboard</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content [fullscreen]="true" class="dashboard-content">
   <div id="container">
-    <div style="margin-bottom: 20px;">
-      <p class="stat-label">{{ currentDate }}</p>
-      <h1 style="font-weight: 600; font-size: 1.8rem; margin: 4px 0 0 0;">Good evening</h1>
+
+    <div class="header-section">
+      <p class="date-label">{{ currentDate }}</p>
+      <h1 class="greeting-title">Good evening</h1>
     </div>
 
-    <div class="sleep-highlight-card" (click)="openLogSleepModal()">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Last Night's Sleep</span>
-        <ion-icon name="moon" style="font-size: 1.4rem;"></ion-icon>
+    <div class="yellow-card" *ngIf="lastNightSleep; else unloggedSleepTemplate" (click)="openLogSleepModal()">
+      <div class="card-header-row">
+        <span class="card-eyebrow">Last night</span>
+        <ion-icon name="moon" class="card-top-icon"></ion-icon>
+      </div>
+      <div class="sleep-duration-display mono-font">
+        {{ lastNightSleep.summaryString() }}
+      </div>
+      <div class="sleep-times-row">
+        <span><ion-icon name="moon-outline"></ion-icon> {{ lastNightSleep.sleepStart | date:'shortTime' }}</span>
+        <span class="time-divider">—</span>
+        <span><ion-icon name="sunny-outline"></ion-icon> {{ lastNightSleep.sleepEnd | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <ng-template #unloggedSleepTemplate>
+      <div class="yellow-card unlogged" (click)="openLogSleepModal()">
+        <h2 class="unlogged-title">How did you sleep last night?</h2>
+        <ion-button class="action-btn-dark" expand="block">
+          Log sleep
+        </ion-button>
+      </div>
+    </ng-template>
+
+    <div class="stats-grid">
+      <div class="dark-stat-card">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="moon" class="stat-icon"></ion-icon>
+        </div>
+        <p class="stat-label">Weekly average</p>
+        <p class="stat-value mono-font">8h 10m</p>
+      </div>
+
+      <div class="dark-stat-card">
+        <div class="stat-icon-wrapper">
+          <ion-icon name="flash" class="stat-icon"></ion-icon>
+        </div>
+        <p class="stat-label">Sleep Log Consistency</p>
+        <p class="stat-value mono-font">{{ consistencyValue }}</p>
+      </div>
+    </div>
+
+    <div class="checkin-container-card" *ngIf="todaySleepinessLogs && todaySleepinessLogs.length > 0; else unloggedSleepinessTemplate">
+      <div class="checkin-header">
+        <p class="section-eyebrow">TODAY'S CHECK-INS</p>
+        <h3 class="section-main-title">{{ todaySleepinessLogs.length }} Sleepiness Log</h3>
       </div>
       
-      <div *ngIf="lastNightSleep">
-        <div class="sleep-duration mono-font">{{ lastNightSleep.summaryString() }}</div>
-        <p style="margin: 0; font-size: 0.9rem; opacity: 0.85;">
-          {{ lastNightSleep?.sleepStart | date:'shortTime' }} – {{ lastNightSleep?.sleepEnd | date:'shortTime' }}
-        </p>
+      <div class="latest-checkin-info" *ngFor="let log of todaySleepinessLogs">
+        <span class="sub-label" style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 6px;">Last Check-In</span>
+        <div class="checkin-badge mono-font">
+          {{ log.loggedAt | date:'shortTime' }} · Level {{ log.loggedValue }}
+        </div>
       </div>
-      <div *ngIf="!lastNightSleep">
-        <div class="sleep-duration mono-font">No sleep logged</div>
-        <p style="margin: 0; font-size: 0.9rem;">Tap here to log your sleep</p>
-      </div>
-    </div>
 
-    <div class="dark-stat-card">
-      <div class="stat-label">Weekly Average</div>
-      <div class="stat-value mono-font">8.0 hrs / night</div>
-    </div>
-
-    <div class="dark-stat-card">
-      <div class="stat-label">Sleep Consistency</div>
-      <div class="stat-value mono-font">92% On Track</div>
-    </div>
-
-    <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px;">
-      <ion-button expand="block" color="primary" (click)="openLogSleepModal()" style="font-weight: 600;">
-        <ion-icon name="moon-outline" slot="start"></ion-icon>
-        Log Overnight Sleep
-      </ion-button>
-      
-      <ion-button expand="block" fill="outline" color="primary" (click)="openLogSleepinessModal()" style="font-weight: 600;">
-        <ion-icon name="flash-outline" slot="start"></ion-icon>
-        Check Sleepiness Scale
+      <ion-button fill="outline" class="log-secondary-btn" expand="block" (click)="openLogSleepinessModal()">
+        <ion-icon name="add" slot="start"></ion-icon> Log sleepiness
       </ion-button>
     </div>
+
+    <ng-template #unloggedSleepinessTemplate>
+      <div class="checkin-container-card" (click)="openLogSleepinessModal()">
+        <div class="checkin-header">
+          <p class="section-eyebrow">TODAY'S CHECK-INS</p>
+          <h3 class="section-main-title">How are you feeling?</h3>
+        </div>
+        <ion-button fill="outline" class="log-secondary-btn" expand="block">
+          <ion-icon name="add" slot="start"></ion-icon> Log sleepiness
+        </ion-button>
+      </div>
+    </ng-template>
+
+    <div class="info-footer-card">
+      <div class="footer-icon">
+        <ion-icon name="flash"></ion-icon>
+      </div>
+      <div class="footer-text">
+        <h4>Small steps, clearer patterns</h4>
+        <p>Keep logging sleep for a more useful weekly view.</p>
+      </div>
+    </div>
+
   </div>
 </ion-content>

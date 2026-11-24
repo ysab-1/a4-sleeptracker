@@ -1,50 +1,207 @@
+.dashboard-content {
+  --background: #0b1120;
+}
+
 #container {
   padding: 16px;
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
-.sleep-highlight-card {
-  background: #ffc409;
-  color: #0b1120;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 20px rgba(255, 196, 9, 0.2);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  .sleep-duration {
-    font-size: 2.2rem;
+.header-section {
+  margin-bottom: 18px;
+  .date-label {
+    font-size: 0.75rem;
     font-weight: 700;
-    margin: 8px 0 4px 0;
+    letter-spacing: 1px;
+    color: #facc15;
+    margin: 0 0 4px 0;
+  }
+  .greeting-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
   }
 }
 
-.dark-stat-card {
-  background: #131b2e;
-  color: #f8fafc;
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+// Yellow Highlight Card
+.yellow-card {
+  background: #ffc409;
+  color: #0b1120;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 25px rgba(255, 196, 9, 0.15);
+  cursor: pointer;
 
-  .stat-label {
-    font-size: 0.85rem;
+  &.unlogged {
+    .unlogged-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 14px 0;
+    }
+    .action-btn-dark {
+      --background: #0b1120;
+      --color: #ffffff;
+      --border-radius: 12px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
+  .card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #94a3b8;
+    margin-bottom: 6px;
+  }
+
+  .sleep-duration-display {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .sleep-times-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.9;
+    
+    ion-icon {
+      font-size: 1rem;
+      vertical-align: middle;
+    }
+    .time-divider {
+      opacity: 0.6;
+    }
+  }
+}
+
+// Stats Grid (Two-column layout matching Figma)
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  .dark-stat-card {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+    padding: 16px;
+    color: #ffffff;
+
+    .stat-icon-wrapper {
+      color: #ffc409;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 6px 0;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+}
+
+// Today's Check-Ins Card
+.checkin-container-card {
+  background: #131b2e;
+  border: 1px solid rgba(255, 196, 9, 0.3);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  color: #ffffff;
+
+  .section-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #facc15;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     margin: 0 0 4px 0;
   }
 
-  .stat-value {
-    font-size: 1.4rem;
+  .section-main-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 14px 0;
+  }
+
+  .checkin-badge {
+    background: rgba(255, 196, 9, 0.1);
+    color: #ffc409;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: #f8fafc;
-    margin: 0;
+    margin-bottom: 14px;
+    display: inline-block;
+  }
+
+  .log-secondary-btn {
+    --border-color: rgba(255, 255, 255, 0.2);
+    --color: #ffffff;
+    --border-radius: 12px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 4px;
+  }
+}
+
+// Footer Info Card
+.info-footer-card {
+  background: #131b2e;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #ffffff;
+
+  .footer-icon {
+    background: rgba(255, 196, 9, 0.1);
+    color: #ffc409;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .footer-text {
+    h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 2px 0;
+    }
+    p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin: 0;
+    }
   }
 }
