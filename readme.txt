@@ -26,7 +26,8 @@ N/A
 
 
 5. Is there anything special we need to know in order to run your code?
-I used a native feature (notifications), so make sure you can demo the code on a simulator.
+I used a native feature (notifications), so make sure you can demo the code on a simulator. The demo video is linked
+in this file: https://drive.google.com/file/d/1gKbvkUrHpRXc1Hk5-eUgl68XGs9dnSNI/view?usp=sharing
 
 --Aim for no more than two sentences for each of the following questions.--
 
