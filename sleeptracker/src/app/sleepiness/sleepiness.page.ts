@@ -1,34 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { SleepService } from '../services/sleep.service';
 import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
 import { LogSleepinessModalComponent } from '../modals/log-sleepiness-modal.component';
-import { ToastController } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { 
+  flash, 
+  calendarOutline, 
+  chevronForwardOutline, 
+  add, 
+  trashOutline 
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-sleepiness',
   templateUrl: './sleepiness.page.html',
+  styleUrls: ['./sleepiness.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [CommonModule, IonicModule]
 })
 export class SleepinessPage implements OnInit {
-  sleepinessSegment = 'week';
-  sleepinessLogs: StanfordSleepinessData[] = [];
+  todaySleepinessLogs: StanfordSleepinessData[] = [];
 
-  constructor(private sleepService: SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController) {}
+  constructor(
+    private sleepService: SleepService,
+    private modalCtrl: ModalController
+  ) {
+    addIcons({
+      flash,
+      calendarOutline,
+      chevronForwardOutline,
+      add,
+      trashOutline
+    });
+  }
 
   ngOnInit() {
-    this.loadLogs();
+    this.loadTodaySleepiness();
   }
 
   ionViewWillEnter() {
-    this.loadLogs();
+    this.loadTodaySleepiness();
   }
 
-  loadLogs() {
-    this.sleepinessLogs = this.sleepService.getAllSleepinessData();
+  loadTodaySleepiness() {
+    const allEntries = SleepService.AllSleepData;
+    const sleepinessLogs = allEntries.filter(entry => entry instanceof StanfordSleepinessData) as StanfordSleepinessData[];
+    
+    const today = new Date().toDateString();
+    this.todaySleepinessLogs = sleepinessLogs.filter(log => {
+      const logDate = log.loggedAt ? new Date(log.loggedAt) : new Date();
+      return logDate.toDateString() === today;
+    });
+
+    // Sort descending by time
+    this.todaySleepinessLogs.sort((a, b) => new Date(b.loggedAt).getTime() - new Date(a.loggedAt).getTime());
   }
 
   async openLogSleepinessModal() {
@@ -39,58 +66,28 @@ export class SleepinessPage implements OnInit {
     const { data } = await modal.onDidDismiss();
     if (data) {
       this.sleepService.logSleepinessData(data);
-      this.loadLogs();
+      this.loadTodaySleepiness();
     }
   }
 
-  async presentSleepinessLoggedToast(newData: StanfordSleepinessData) {
-    const toast = await this.toastCtrl.create({
-      message: 'Sleepiness has been logged!\nTap to undo.',
-      duration: 4000,
-      position: 'bottom',
-      buttons: [{
-        text: 'Undo',
-        role: 'cancel',
-        handler: () => {
-          this.sleepService.deleteSleepinessData(newData.id);
-          this.loadLogs();
-        }
-      }]
+  async openEditSleepinessModal(log: StanfordSleepinessData) {
+    const modal = await this.modalCtrl.create({
+      component: LogSleepinessModalComponent,
+      componentProps: { existingData: log }
     });
-    await toast.present();
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      this.loadTodaySleepiness();
+    }
   }
 
-  async presentSleepinessEditedToast(updatedData: StanfordSleepinessData, oldSnapshot: StanfordSleepinessData) {
-    const toast = await this.toastCtrl.create({
-      message: 'A sleepiness log has been edited!\nTap to undo.',
-      duration: 4000,
-      position: 'bottom',
-      buttons: [{
-        text: 'Undo',
-        role: 'cancel',
-        handler: () => {
-          this.sleepService.updateSleepinessData(oldSnapshot);
-          this.loadLogs();
-        }
-      }]
-    });
-    await toast.present();
-  }
-
-  async presentSleepinessDeletedToast(deletedData: StanfordSleepinessData, index: number) {
-    const toast = await this.toastCtrl.create({
-      message: 'A sleepiness log has been deleted!\nTap to undo.',
-      duration: 4000,
-      position: 'bottom',
-      buttons: [{
-        text: 'Undo',
-        role: 'cancel',
-        handler: () => {
-          SleepService.AllSleepinessData.splice(index, 0, deletedData);
-          this.loadLogs();
-        }
-      }]
-    });
-    await toast.present();
+  deleteLog(log: StanfordSleepinessData) {
+    // Assuming your service allows removal or filtering from AllSleepData
+    const index = SleepService.AllSleepData.indexOf(log);
+    if (index > -1) {
+      SleepService.AllSleepData.splice(index, 1);
+      this.loadTodaySleepiness();
+    }
   }
 }

@@ -1,34 +1,70 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
-    <ion-title>Sleepiness Data</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="openLogSleepinessModal()">
-        <ion-icon name="add" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Sleepiness</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-segment [(ngModel)]="sleepinessSegment" mode="ios" class="custom-segment">
-    <ion-segment-button value="week">
-      <ion-label>Week</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="day">
-      <ion-label>Day</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+<ion-content [fullscreen]="true" class="sleepiness-content">
+  <div id="container">
 
-  <div class="history-list">
-    <h3>Check-In History</h3>
-    <ion-card *ngFor="let item of sleepinessLogs" class="dark-stat-card">
-      <ion-card-content>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="mono-font stat-value" style="font-size: 1.2rem;">Level {{ item.loggedValue }}</span>
-          <span class="stat-label">{{ item.loggedAt | date:'shortTime' }}</span>
+    <div class="yellow-border-card">
+      <div class="card-center-header">
+        <div class="icon-yellow-box">
+          <ion-icon name="flash"></ion-icon>
         </div>
-        <p class="stat-label" style="margin-top: 6px;" *ngIf="item.notes">Notes: {{ item.notes }}</p>
-      </ion-card-content>
-    </ion-card>
+
+        <ng-container *ngIf="todaySleepinessLogs.length > 0; else unloggedTemplate">
+          <h2 class="card-main-title">
+            {{ todaySleepinessLogs.length }} {{ todaySleepinessLogs.length === 1 ? 'Log Today' : 'Logs Today' }}
+          </h2>
+          <p class="card-subtitle">Log whenever you feel sleepy to discover when your energy changes.</p>
+
+          <ion-button class="action-btn-yellow" expand="block" (click)="openLogSleepinessModal()">
+            <ion-icon name="add" slot="start"></ion-icon> Log Sleepiness
+          </ion-button>
+
+          <div class="checkins-list">
+            <div class="checkin-item" *ngFor="let log of todaySleepinessLogs" (click)="openEditSleepinessModal(log)">
+              <div class="checkin-left">
+                <div class="level-badge mono-font">{{ log.loggedValue }}</div>
+                <div class="checkin-details">
+                  <div class="checkin-time mono-font">{{ log.loggedAt | date:'h:mm a' }}</div>
+                  <div class="checkin-notes" *ngIf="log.notes">{{ log.notes }}</div>
+                </div>
+              </div>
+              <ion-button fill="clear" class="delete-icon-btn" (click)="$event.stopPropagation(); deleteLog(log)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <p class="tap-hint">TAP A LOG TO EDIT IT</p>
+        </ng-container>
+
+        <ng-template #unloggedTemplate>
+          <h2 class="card-main-title">Feeling Tired?</h2>
+          <p class="card-subtitle">Log whenever you feel sleepy to discover when your energy changes.</p>
+
+          <ion-button class="action-btn-yellow" expand="block" (click)="openLogSleepinessModal()">
+            <ion-icon name="add" slot="start"></ion-icon> Log Sleepiness
+          </ion-button>
+        </ng-template>
+
+      </div>
+    </div>
+
+    <div class="nav-widget-card" routerLink="/sleepiness-history">
+      <div class="widget-left">
+        <div class="widget-icon-box">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div class="widget-text">
+          <h3>View Sleepiness Data</h3>
+          <p>Your daily logs and weekly phases</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="widget-arrow"></ion-icon>
+    </div>
+
   </div>
 </ion-content>
