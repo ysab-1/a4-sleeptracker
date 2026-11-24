@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -27,7 +27,8 @@ export class SleepPage implements OnInit {
   constructor(
     private sleepService: SleepService,
     private modalCtrl: ModalController,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     addIcons({
       moonOutline,
@@ -48,20 +49,24 @@ export class SleepPage implements OnInit {
 
   loadTodaySleep() {
     const overnightLogs = SleepService.AllOvernightData;
+    
     if (overnightLogs.length > 0) {
-      overnightLogs.sort((a, b) => b.sleepStart.getTime() - a.sleepStart.getTime());
+      overnightLogs.sort((a, b) => new Date(b.sleepStart).getTime() - new Date(a.sleepStart).getTime());
       
-      const today = new Date().toDateString();
-      const latestLog = overnightLogs[0];
+      const todayString = new Date().toDateString();
       
-      if (new Date(latestLog.sleepEnd).toDateString() === today || new Date(latestLog.sleepStart).toDateString() === today) {
-        this.lastNightSleep = latestLog;
-      } else {
-        this.lastNightSleep = null;
-      }
+      const todaysLog = overnightLogs.find(log => {
+        const startDate = new Date(log.sleepStart).toDateString();
+        const endDate = new Date(log.sleepEnd).toDateString();
+        return startDate === todayString || endDate === todayString;
+      });
+
+      this.lastNightSleep = todaysLog || null;
     } else {
       this.lastNightSleep = null;
     }
+    
+    this.cdr.detectChanges();
   }
 
   openSleepHistory() {
@@ -86,8 +91,26 @@ export class SleepPage implements OnInit {
       componentProps: { existingData: sleepEntry }
     });
     await modal.present();
+    
     const { data } = await modal.onDidDismiss();
+    
     if (data) {
+      const updatedLog = data.updated || data;
+      const originalLog = data.original || sleepEntry;
+
+      if (updatedLog) {
+        const originalStartTime = new Date(originalLog.sleepStart).getTime();
+        const index = SleepService.AllOvernightData.findIndex(
+          log => new Date(log.sleepStart).getTime() === originalStartTime
+        );
+
+        if (index > -1) {
+          SleepService.AllOvernightData[index] = updatedLog;
+        } else {
+          SleepService.AllOvernightData.push(updatedLog);
+        }
+      }
+
       this.loadTodaySleep();
     }
   }
