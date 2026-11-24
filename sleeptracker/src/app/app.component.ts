@@ -31,8 +31,16 @@ export class AppComponent implements OnInit {
       // Request permission to display notifications
       const permStatus = await LocalNotifications.requestPermissions();
       if (permStatus.display === 'granted') {
+        
         await LocalNotifications.schedule({
           notifications: [
+            {
+              title: 'Sleep Tracker',
+              body: 'Good evening! Feeling sleepy? Make sure to log it!',
+              id: 99,
+              schedule: { at: new Date(new Date().getTime() + 4000) },
+              sound: undefined,
+            },
             {
               title: 'Sleep Tracker',
               body: 'Good morning! Make sure to log your sleep from last night.',
