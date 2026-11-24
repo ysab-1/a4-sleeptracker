@@ -1,0 +1,207 @@
+.sleep-content {
+    --background: #0b1120;
+  }
+  
+  #container {
+    padding: 20px 16px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  // Logged Sleep Main Card
+  .sleep-main-card {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+  
+      .section-eyebrow {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0 0 4px 0;
+      }
+  
+      .total-duration {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.1;
+      }
+  
+      .mood-badge {
+        background: rgba(255, 196, 9, 0.1);
+        color: #ffc409;
+        border: 1px solid rgba(255, 196, 9, 0.2);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+  
+        ion-icon {
+          font-size: 1rem;
+        }
+      }
+    }
+  
+    .inner-time-card {
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-bottom: 16px;
+  
+      .time-block {
+        text-align: center;
+  
+        .sub-label {
+          display: block;
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: #94a3b8;
+          text-transform: uppercase;
+          margin-bottom: 4px;
+        }
+  
+        .time-val {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #ffffff;
+        }
+      }
+  
+      .time-divider {
+        width: 1px;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  
+    .tap-to-edit-text {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  // Unlogged Yellow Highlight Card
+  .yellow-card {
+    background: #ffc409;
+    color: #0b1120;
+    border-radius: 24px;
+    padding: 28px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(255, 196, 9, 0.15);
+    cursor: pointer;
+  
+    .unlogged-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      .unlogged-icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+      }
+  
+      .unlogged-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+      }
+  
+      .unlogged-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.85;
+        margin: 0 0 20px 0;
+        max-width: 280px;
+        line-height: 1.4;
+      }
+  
+      .action-btn-dark {
+        --background: #0b1120;
+        --color: #ffffff;
+        --border-radius: 14px;
+        font-weight: 700;
+        width: 100%;
+        margin: 0;
+        height: 48px;
+      }
+    }
+  }
+  
+  // View Sleep Data Navigation Widget
+  .nav-widget-card {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  
+    &:hover {
+      border-color: rgba(255, 196, 9, 0.3);
+    }
+  
+    .widget-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+  
+      .widget-icon-box {
+        background: rgba(255, 196, 9, 0.1);
+        color: #ffc409;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+  
+      .widget-text {
+        h3 {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #ffffff;
+          margin: 0 0 2px 0;
+        }
+        p {
+          font-size: 0.8rem;
+          color: #94a3b8;
+          margin: 0;
+        }
+      }
+    }
+  
+    .widget-arrow {
+      font-size: 1.2rem;
+      color: #64748b;
+    }
+  }

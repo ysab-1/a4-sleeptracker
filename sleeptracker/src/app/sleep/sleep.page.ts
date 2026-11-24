@@ -1,34 +1,65 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { SleepService } from '../services/sleep.service';
 import { OvernightSleepData } from '../data/overnight-sleep-data';
 import { LogSleepModalComponent } from '../modals/log-sleep-modal.component';
-import { ToastController } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { 
+  moonOutline, 
+  calendarOutline, 
+  chevronForwardOutline, 
+  happyOutline, 
+  add 
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-sleep',
   templateUrl: './sleep.page.html',
+  styleUrls: ['./sleep.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [CommonModule, IonicModule]
 })
 export class SleepPage implements OnInit {
-  sleepSegment = 'week';
-  overnightLogs: OvernightSleepData[] = [];
+  lastNightSleep: OvernightSleepData | null = null;
 
-  constructor(private sleepService: SleepService, private modalCtrl: ModalController, private toastCtrl: ToastController) {}
+  constructor(
+    private sleepService: SleepService,
+    private modalCtrl: ModalController
+  ) {
+    addIcons({
+      moonOutline,
+      calendarOutline,
+      chevronForwardOutline,
+      happyOutline,
+      add
+    });
+  }
 
   ngOnInit() {
-    this.loadLogs();
+    this.loadTodaySleep();
   }
 
   ionViewWillEnter() {
-    this.loadLogs();
+    this.loadTodaySleep();
   }
 
-  loadLogs() {
-    this.overnightLogs = this.sleepService.getAllOvernightData();
+  loadTodaySleep() {
+    const overnightLogs = SleepService.AllOvernightData;
+    if (overnightLogs.length > 0) {
+      overnightLogs.sort((a, b) => b.sleepStart.getTime() - a.sleepStart.getTime());
+      
+      const today = new Date().toDateString();
+      const latestLog = overnightLogs[0];
+      
+      if (new Date(latestLog.sleepEnd).toDateString() === today || new Date(latestLog.sleepStart).toDateString() === today) {
+        this.lastNightSleep = latestLog;
+      } else {
+        this.lastNightSleep = null;
+      }
+    } else {
+      this.lastNightSleep = null;
+    }
   }
 
   async openLogSleepModal() {
@@ -39,59 +70,19 @@ export class SleepPage implements OnInit {
     const { data } = await modal.onDidDismiss();
     if (data) {
       this.sleepService.logOvernightData(data);
-      this.loadLogs();
+      this.loadTodaySleep();
     }
   }
 
-  async presentSleepLoggedToast(newData: OvernightSleepData, previousDataList: OvernightSleepData[]) {
-    const toast = await this.toastCtrl.create({
-      message: 'Sleep has been logged!\nTap to undo.',
-      duration: 4000,
-      position: 'bottom',
-      cssClass: 'custom-sleep-toast',
-      buttons: [{
-        text: 'Undo',
-        role: 'cancel',
-        handler: () => {
-          this.sleepService.deleteOvernightData(newData.id);
-          this.loadLogs();
-        }
-      }]
+  async openEditSleepModal(sleepEntry: OvernightSleepData) {
+    const modal = await this.modalCtrl.create({
+      component: LogSleepModalComponent,
+      componentProps: { existingData: sleepEntry }
     });
-    await toast.present();
-  }
-
-  async presentSleepEditedToast(updatedData: OvernightSleepData, oldSnapshot: OvernightSleepData) {
-    const toast = await this.toastCtrl.create({
-      message: 'Sleep log has been edited!\nTap to undo.',
-      duration: 4000,
-      position: 'bottom',
-      buttons: [{
-        text: 'Undo',
-        role: 'cancel',
-        handler: () => {
-          this.sleepService.updateOvernightData(oldSnapshot);
-          this.loadLogs();
-        }
-      }]
-    });
-    await toast.present();
-  }
-
-  async presentSleepDeletedToast(deletedData: OvernightSleepData, index: number) {
-    const toast = await this.toastCtrl.create({
-      message: 'A sleep log has been deleted!\nTap to undo.',
-      duration: 4000,
-      position: 'bottom',
-      buttons: [{
-        text: 'Undo',
-        role: 'cancel',
-        handler: () => {
-          SleepService.AllOvernightData.splice(index, 0, deletedData);
-          this.loadLogs();
-        }
-      }]
-    });
-    await toast.present();
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data) {
+      this.loadTodaySleep();
+    }
   }
 }

@@ -1,45 +1,63 @@
-<ion-header class="ion-no-border">
+<ion-header class="ion-no-border" [translucent]="true">
   <ion-toolbar>
-    <ion-title>Sleep Data</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="openLogSleepModal()">
-        <ion-icon name="add" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Sleep</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!-- Segment Switcher -->
-  <ion-segment [(ngModel)]="sleepSegment" mode="ios" class="custom-segment">
-    <ion-segment-button value="week">
-      <ion-label>Week</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="day">
-      <ion-label>Day</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+<ion-content [fullscreen]="true" class="sleep-content">
+  <div id="container">
 
-  <!-- Weekly Summary View -->
-  <div *ngIf="sleepSegment === 'week'" class="dark-stat-card ion-text-center">
-    <h2 class="mono-font stat-value" style="font-size: 2rem;">8.0 hrs</h2>
-    <p class="stat-label">Average nightly sleep</p>
-  </div>
+    <div class="sleep-main-card" *ngIf="lastNightSleep; else unloggedSleepTemplate" (click)="openEditSleepModal(lastNightSleep)">
+      <div class="card-top-row">
+        <div>
+          <p class="section-eyebrow">Total Sleep</p>
+          <div class="total-duration mono-font">{{ lastNightSleep.summaryString() }}</div>
+        </div>
+        <div class="mood-badge">
+          <ion-icon name="happy-outline"></ion-icon> Refreshed
+        </div>
+      </div>
 
-  <!-- Overnight History List -->
-  <div class="history-list ion-margin-top">
-    <h3>Overnight History</h3>
-    <ion-card *ngFor="let item of overnightLogs" class="dark-stat-card">
-      <ion-card-content>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span class="mono-font stat-value" style="font-size: 1.2rem;">{{ item.summaryString() }}</span>
-          <span class="stat-label">{{ item.sleepStart | date:'mediumDate' }}</span>
+      <div class="inner-time-card">
+        <div class="time-block">
+          <span class="sub-label">Bedtime</span>
+          <span class="time-val mono-font">{{ lastNightSleep.sleepStart | date:'shortTime' }}</span>
         </div>
-        <div class="stat-label" style="margin-top: 8px;">
-          <ion-icon name="moon-outline"></ion-icon> {{ item.sleepStart | date:'shortTime' }} &nbsp;&nbsp;
-          <ion-icon name="sunny-outline"></ion-icon> {{ item.sleepEnd | date:'shortTime' }}
+        <div class="time-divider"></div>
+        <div class="time-block">
+          <span class="sub-label">Wake Up</span>
+          <span class="time-val mono-font">{{ lastNightSleep.sleepEnd | date:'shortTime' }}</span>
         </div>
-      </ion-card-content>
-    </ion-card>
+      </div>
+
+      <div class="tap-to-edit-text">Tap to edit</div>
+    </div>
+
+    <ng-template #unloggedSleepTemplate>
+      <div class="yellow-card unlogged" (click)="openLogSleepModal()">
+        <div class="unlogged-content">
+          <ion-icon name="moon-outline" class="unlogged-icon"></ion-icon>
+          <h2 class="unlogged-title">No Sleep Logged Today</h2>
+          <p class="unlogged-subtitle">Add last night's sleep, how you felt, and any awake periods.</p>
+          <ion-button class="action-btn-dark" expand="block">
+            Log Sleep
+          </ion-button>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="nav-widget-card" routerLink="/sleep-history">
+      <div class="widget-left">
+        <div class="widget-icon-box">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <div class="widget-text">
+          <h3>View Sleep Data</h3>
+          <p>Your sleep trends and averages</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline" class="widget-arrow"></ion-icon>
+    </div>
+
   </div>
 </ion-content>
