@@ -12,7 +12,9 @@
 - 1/1 A readme and demo video which explains how these features were implemented and their design rationale
 
 2. How long, in hours, did it take you to complete this assignment?
-50 hours, including creating designs on Figma for the UI and setting up the work environment.
+50 hours, including creating designs on Figma for the UI and setting up the work environment. I also spent a long time trying
+to set up a simulator, but it never worked. I acknowledge that I should've started sooner on the project, but I got sick and never
+bothered to ask for an extension.
 
 3. What online resources did you consult when completing this assignment? (list specific URLs)
 - Ionic Framework Documentation (https://ionicframework.com/docs)
