@@ -45,5 +45,7 @@ export class LogSleepinessModalComponent {
 
     const newEntry = new StanfordSleepinessData(this.selectedLevel, dateObj, this.notes);
     this.modalCtrl.dismiss(newEntry);
+
+    this.modalCtrl.dismiss(newEntry);
   }
 }

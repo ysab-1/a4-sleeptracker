@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -27,7 +27,8 @@ export class SleepinessPage implements OnInit {
   constructor(
     private sleepService: SleepService,
     private modalCtrl: ModalController,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     addIcons({
       flash,
@@ -57,6 +58,8 @@ export class SleepinessPage implements OnInit {
     });
 
     this.todaySleepinessLogs.sort((a, b) => new Date(b.loggedAt).getTime() - new Date(a.loggedAt).getTime());
+
+    this.cdr.detectChanges();
   }
 
   openSleepinessHistory() {
@@ -73,7 +76,7 @@ export class SleepinessPage implements OnInit {
     const { data } = await modal.onDidDismiss();
 
     if (data) {
-      this.sleepService.logSleepinessData(data); // Or push to AllSleepData depending on your service method
+      SleepService.AllSleepData.push(data);
       
       this.loadTodaySleepiness();
     }
