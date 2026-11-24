@@ -1,33 +1,132 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Log Sleep</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="cancel()">Cancel</ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="save()" [strong]="true">Save</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="modal-content">
+  <div class="modal-container">
+    
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Log Sleep</h2>
+        <p class="modal-subtitle">Add last night's rest and any awake periods.</p>
+      </div>
+      <ion-button fill="clear" class="close-btn" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </div>
 
-<ion-content class="ion-padding">
-  <ion-item class="dark-stat-card">
-    <ion-label position="stacked">Sleep Start</ion-label>
-    <ion-datetime-button datetime="startTime"></ion-datetime-button>
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime id="startTime" presentation="date-time" [(ngModel)]="sleepStart"></ion-datetime>
-      </ng-template>
-    </ion-modal>
-  </ion-item>
+    <div class="section-block">
+      <label class="field-label">Date</label>
+      <ion-datetime-button datetime="sleep-date" class="full-width-picker"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="sleep-date" presentation="date" [(ngModel)]="sleepDate"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </div>
 
-  <ion-item class="dark-stat-card ion-margin-top">
-    <ion-label position="stacked">Sleep End</ion-label>
-    <ion-datetime-button datetime="endTime"></ion-datetime-button>
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime id="endTime" presentation="date-time" [(ngModel)]="sleepEnd"></ion-datetime>
-      </ng-template>
-    </ion-modal>
-  </ion-item>
+    <div class="form-row">
+      <div class="input-group">
+        <label class="field-label">
+          <ion-icon name="moon-outline"></ion-icon> Bedtime
+        </label>
+        <ion-datetime-button datetime="bedtime-picker"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="bedtime-picker" presentation="time" [(ngModel)]="bedtime"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </div>
+
+      <div class="input-group">
+        <label class="field-label">
+          <ion-icon name="sunny-outline"></ion-icon> Woke Up
+        </label>
+        <ion-datetime-button datetime="wakeup-picker"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="wakeup-picker" presentation="time" [(ngModel)]="wakeupTime"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-header-row">
+        <div>
+          <label class="field-label">Awake Periods <span class="optional-tag">(optional)</span></label>
+          <p class="section-hint">Log interruptions overnight</p>
+        </div>
+        <ion-button fill="outline" class="add-period-btn" (click)="addAwakePeriod()">
+          <ion-icon name="add" slot="start"></ion-icon> Add period
+        </ion-button>
+      </div>
+
+      <div class="awake-period-card" *ngFor="let period of awakePeriods; let i = index">
+        <div class="awake-period-inputs">
+          <div class="input-group">
+            <label class="sub-field-label">Awake</label>
+            <ion-datetime-button [datetime]="'awake-start-' + i"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime [id]="'awake-start-' + i" presentation="time" [(ngModel)]="period.awakeTime"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </div>
+
+          <div class="input-group">
+            <label class="sub-field-label">Asleep</label>
+            <ion-datetime-button [datetime]="'awake-end-' + i"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime [id]="'awake-end-' + i" presentation="time" [(ngModel)]="period.asleepTime"></ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </div>
+
+          <ion-button fill="clear" class="delete-btn" (click)="removeAwakePeriod(i)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <label class="field-label">How Did You Feel?</label>
+      <div class="mood-grid">
+        <div 
+          class="mood-card" 
+          [class.selected]="selectedMood === 'Refreshed'"
+          (click)="selectMood('Refreshed')">
+          <ion-icon name="happy-outline"></ion-icon>
+          <span>Refreshed</span>
+        </div>
+        <div 
+          class="mood-card" 
+          [class.selected]="selectedMood === 'Neutral'"
+          (click)="selectMood('Neutral')">
+          <ion-icon name="remove-circle-outline"></ion-icon>
+          <span>Neutral</span>
+        </div>
+        <div 
+          class="mood-card" 
+          [class.selected]="selectedMood === 'Tired'"
+          (click)="selectMood('Tired')">
+          <ion-icon name="sad-outline"></ion-icon>
+          <span>Tired</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <label class="field-label">Note <span class="optional-tag">(optional)</span></label>
+      <ion-textarea 
+        [(ngModel)]="notes" 
+        placeholder="Dreams, late meal, noise..." 
+        rows="3"
+        class="custom-textarea">
+      </ion-textarea>
+    </div>
+
+    <ion-button expand="block" class="save-btn" (click)="saveLog()">
+      <ion-icon name="checkmark-outline" slot="start"></ion-icon> Save Sleep
+    </ion-button>
+
+  </div>
 </ion-content>
