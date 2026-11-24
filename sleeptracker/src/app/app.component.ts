@@ -64,6 +64,9 @@ export class AppComponent implements OnInit {
             },
           ],
         });
+
+        const pending = await LocalNotifications.getPending();
+        console.log('Scheduled notifications:', pending);
       }
     } catch (e) {
       console.log('Local notifications are running in a browser environment or unavailable.', e);
