@@ -47,10 +47,13 @@ export class HomePage implements OnInit {
   get todaySleepinessLogs(): StanfordSleepinessData[] {
     const allSleepiness = SleepService.AllSleepData.filter(entry => entry instanceof StanfordSleepinessData) as StanfordSleepinessData[];
     const today = new Date().toDateString();
-    return allSleepiness.filter(log => {
-      const logDate = log.loggedAt ? new Date(log.loggedAt) : new Date();
-      return logDate.toDateString() === today;
-    });
+    
+    return allSleepiness
+      .filter(log => {
+        const logDate = log.loggedAt ? new Date(log.loggedAt) : new Date();
+        return logDate.toDateString() === today;
+      })
+      .sort((a, b) => new Date(b.loggedAt).getTime() - new Date(a.loggedAt).getTime());
   }
 
   async openLogSleepModal() {

@@ -57,13 +57,15 @@
     <div class="checkin-container-card" *ngIf="todaySleepinessLogs && todaySleepinessLogs.length > 0; else unloggedSleepinessTemplate">
       <div class="checkin-header">
         <p class="section-eyebrow">TODAY'S CHECK-INS</p>
-        <h3 class="section-main-title">{{ todaySleepinessLogs.length }} Sleepiness Log</h3>
+        <h3 class="section-main-title">
+          {{ todaySleepinessLogs.length }} {{ todaySleepinessLogs.length === 1 ? 'Sleepiness Log' : 'Sleepiness Logs' }}
+        </h3>
       </div>
       
-      <div class="latest-checkin-info" *ngFor="let log of todaySleepinessLogs">
+      <div class="latest-checkin-info">
         <span class="sub-label" style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 6px;">Last Check-In</span>
         <div class="checkin-badge mono-font">
-          {{ log.loggedAt | date:'shortTime' }} · Level {{ log.loggedValue }}
+          {{ todaySleepinessLogs[0].loggedAt | date:'shortTime' }} · Level {{ todaySleepinessLogs[0].loggedValue }}
         </div>
       </div>
 
