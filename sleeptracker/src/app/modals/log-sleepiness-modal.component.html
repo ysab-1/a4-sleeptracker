@@ -1,29 +1,69 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Log Sleepiness</ion-title>
-    <ion-buttons slot="start">
-      <ion-button (click)="cancel()">Cancel</ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="save()" [strong]="true">Save</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="modal-content">
+  <div class="modal-container">
+    
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Log Sleepiness</h2>
+        <p class="modal-subtitle">Keep track of your drowsiness through the day’s activities.</p>
+      </div>
+      <ion-button fill="clear" class="close-btn" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </div>
 
-<ion-content class="ion-padding">
-  <p class="stat-label">Select current sleepiness level (1–7):</p>
-  
-  <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-    <ion-button *ngFor="let desc of scaleValues.slice(1); let i = index" 
-                [fill]="selectedLevel === (i + 1) ? 'solid' : 'outline'"
-                color="primary"
-                (click)="selectedLevel = i + 1"
-                style="text-align: left; height: auto; padding: 10px;">
-      <strong>Level {{ i + 1 }}:</strong> &nbsp; {{ desc }}
+    <div class="form-row">
+      <div class="input-group">
+        <label class="field-label">Day</label>
+        <ion-datetime-button datetime="date-picker"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="date-picker" presentation="date" [(ngModel)]="selectedDate"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </div>
+
+      <div class="input-group">
+        <label class="field-label">Time</label>
+        <ion-datetime-button datetime="time-picker"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="time-picker" presentation="time" [(ngModel)]="selectedTime"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <label class="field-label">Sleepiness Level</label>
+      <div class="level-grid">
+        <div 
+          *ngFor="let level of scaleValues; let i = index" 
+          class="level-box" 
+          [class.selected]="selectedLevel === (i + 1)"
+          (click)="selectLevel(i + 1)">
+          {{ i + 1 }}
+        </div>
+      </div>
+      <div class="level-description" *ngIf="selectedLevel">
+        {{ getLevelDescription(selectedLevel) }}
+      </div>
+    </div>
+
+    <!-- What's Happening? (Notes) -->
+    <div class="section-block">
+      <label class="field-label">What's Happening?</label>
+      <ion-textarea 
+        [(ngModel)]="notes" 
+        placeholder="Describe what you were doing around the time of this entry." 
+        rows="3"
+        class="custom-textarea">
+      </ion-textarea>
+    </div>
+
+    <!-- Save Button -->
+    <ion-button expand="block" class="save-btn" (click)="saveLog()">
+      <ion-icon name="flash" slot="start"></ion-icon> Save Log
     </ion-button>
-  </div>
 
-  <ion-item class="dark-stat-card">
-    <ion-input label="Notes (optional)" labelPlacement="stacked" [(ngModel)]="notes" placeholder="e.g. Working on project"></ion-input>
-  </ion-item>
+  </div>
 </ion-content>

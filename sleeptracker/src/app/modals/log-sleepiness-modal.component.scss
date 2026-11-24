@@ -1,0 +1,122 @@
+.modal-content {
+    --background: #0b1120;
+  }
+  
+  .modal-container {
+    padding: 24px;
+    max-width: 480px;
+    margin: 0 auto;
+    color: #ffffff;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 4px 0;
+    }
+  
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin: 0;
+    }
+  
+    .close-btn {
+      --color: #94a3b8;
+      font-size: 1.2rem;
+      margin: -8px -8px 0 0;
+    }
+  }
+  
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8;
+    margin-bottom: 8px;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  
+    ion-datetime-button {
+      --background: #131b2e;
+      --color: #ffffff;
+      --border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      width: 100%;
+    }
+  }
+  
+  .section-block {
+    margin-bottom: 20px;
+  }
+  
+  .level-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+  
+    .level-box {
+      background: #131b2e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+  
+      &.selected {
+        background: #ffc409;
+        color: #0b1120;
+        border-color: #ffc409;
+        box-shadow: 0 4px 12px rgba(255, 196, 9, 0.3);
+      }
+    }
+  }
+  
+  .level-description {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffc409;
+    min-height: 20px;
+  }
+  
+  .custom-textarea {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    font-size: 0.9rem;
+    color: #ffffff;
+  }
+  
+  .save-btn {
+    --background: #ffc409;
+    --color: #0b1120;
+    --border-radius: 14px;
+    font-weight: 700;
+    height: 48px;
+    margin-top: 10px;
+  }
