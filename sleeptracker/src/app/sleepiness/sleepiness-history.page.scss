@@ -1,0 +1,304 @@
+.sleepiness-data-content {
+    --background: #0b1120;
+  }
+  
+  #container {
+    padding: 24px 16px;
+    max-width: 500px;
+    margin: 0 auto;
+    color: #ffffff;
+  }
+  
+  .page-header {
+    margin-bottom: 18px;
+  
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+    }
+  
+    .back-link {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      cursor: pointer;
+  
+      &:hover {
+        color: #ffffff;
+      }
+    }
+  }
+  
+  .segment-container {
+    background: #11192c;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-bottom: 18px;
+  
+    .segment-btn {
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #94a3b8;
+      cursor: pointer;
+  
+      &.active {
+        background: #23304a;
+        color: #ffffff;
+      }
+    }
+  }
+  
+  .date-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  
+    .stepper-btn {
+      background: #131b2e;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+  
+      &:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+    }
+  
+    .stepper-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+  }
+  
+  .analytics-card {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 22px;
+    margin-bottom: 14px;
+  
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: #94a3b8;
+      margin: 0 0 18px 0;
+    }
+  
+    .time-slot-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+  
+      .slot-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+  
+        .slot-icon-box {
+          background: #1e293b;
+          color: #ffc409;
+          width: 38px;
+          height: 38px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.1rem;
+        }
+  
+        .slot-title {
+          font-size: 0.95rem;
+          font-weight: 700;
+        }
+  
+        .slot-time-range {
+          font-size: 0.72rem;
+          color: #64748b;
+        }
+      }
+  
+      .slot-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+  
+        .slot-bar-track {
+          width: 80px;
+          height: 6px;
+          background: #0b1120;
+          border-radius: 3px;
+          overflow: hidden;
+  
+          .slot-bar-fill {
+            height: 100%;
+            background: #fbd043;
+            border-radius: 3px;
+          }
+        }
+  
+        .slot-avg-val {
+          font-size: 1rem;
+          font-weight: 700;
+          min-width: 30px;
+          text-align: right;
+        }
+      }
+    }
+  
+    .card-footer-info {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+  }
+  
+  .logs-count-card {
+    background: #131b2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    .logs-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+  
+    .logs-num {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+  }
+  
+  .day-logs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  
+    .checkin-history-card {
+      background: #131b2e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 18px 20px;
+      cursor: pointer;
+  
+      .checkin-item-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+  
+        .checkin-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+  
+          .level-circle {
+            background: #1e293b;
+            color: #ffc409;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+          }
+  
+          .checkin-text {
+            .checkin-time {
+              font-size: 1rem;
+              font-weight: 700;
+              color: #ffffff;
+              margin-bottom: 2px;
+            }
+  
+            .checkin-note-text {
+              font-size: 0.8rem;
+              color: #94a3b8;
+            }
+          }
+        }
+  
+        .delete-btn {
+          background: transparent;
+          border: none;
+          color: #64748b;
+          font-size: 1.2rem;
+          cursor: pointer;
+  
+          &:hover {
+            color: #ef4444;
+          }
+        }
+      }
+    }
+  
+    .tap-edit-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.8px;
+      margin-top: 8px;
+    }
+  }
+  
+  .day-empty-card {
+    background: #11192c;
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 48px 20px;
+    text-align: center;
+  
+    .empty-icon {
+      font-size: 2rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+  
+    .empty-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 6px 0;
+    }
+  
+    .empty-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin: 0;
+    }
+  }

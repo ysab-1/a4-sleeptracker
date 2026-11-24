@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { SleepService } from '../services/sleep.service';
 import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
 import { LogSleepinessModalComponent } from '../modals/log-sleepiness-modal.component';
@@ -25,7 +26,8 @@ export class SleepinessPage implements OnInit {
 
   constructor(
     private sleepService: SleepService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private router: Router
   ) {
     addIcons({
       flash,
@@ -54,18 +56,25 @@ export class SleepinessPage implements OnInit {
       return logDate.toDateString() === today;
     });
 
-    // Sort descending by time
     this.todaySleepinessLogs.sort((a, b) => new Date(b.loggedAt).getTime() - new Date(a.loggedAt).getTime());
+  }
+
+  openSleepinessHistory() {
+    this.router.navigate(['/sleepiness/sleepiness-history']);
   }
 
   async openLogSleepinessModal() {
     const modal = await this.modalCtrl.create({
       component: LogSleepinessModalComponent,
     });
+    
     await modal.present();
+
     const { data } = await modal.onDidDismiss();
+
     if (data) {
-      this.sleepService.logSleepinessData(data);
+      this.sleepService.logSleepinessData(data); // Or push to AllSleepData depending on your service method
+      
       this.loadTodaySleepiness();
     }
   }
@@ -83,7 +92,6 @@ export class SleepinessPage implements OnInit {
   }
 
   deleteLog(log: StanfordSleepinessData) {
-    // Assuming your service allows removal or filtering from AllSleepData
     const index = SleepService.AllSleepData.indexOf(log);
     if (index > -1) {
       SleepService.AllSleepData.splice(index, 1);

@@ -1,0 +1,119 @@
+<ion-content [fullscreen]="true" class="sleepiness-data-content">
+    <div id="container">
+  
+      <div class="page-header">
+        <h1 class="page-title">Sleepiness Data</h1>
+        <button class="back-link" (click)="goBackToToday()">
+          <ion-icon name="chevron-back-outline"></ion-icon> Back to Today
+        </button>
+      </div>
+  
+      <div class="segment-container">
+        <button 
+          class="segment-btn" 
+          [class.active]="selectedSegment === 'week'" 
+          (click)="selectedSegment = 'week'">
+          Week
+        </button>
+        <button 
+          class="segment-btn" 
+          [class.active]="selectedSegment === 'day'" 
+          (click)="selectedSegment = 'day'">
+          Day
+        </button>
+      </div>
+  
+      <ng-container *ngIf="selectedSegment === 'week'">
+        
+        <div class="date-stepper">
+          <button class="stepper-btn" (click)="changeWeek(-1)">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <span class="stepper-label mono-font">{{ weekRangeLabel }}</span>
+          <button class="stepper-btn" (click)="changeWeek(1)" [disabled]="isCurrentWeek">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+  
+        <div class="analytics-card">
+          <p class="section-eyebrow">AVERAGE BY TIME OF DAY</p>
+  
+          <div class="time-slot-row" *ngFor="let slot of timeSlots">
+            <div class="slot-left">
+              <div class="slot-icon-box">
+                <ion-icon [name]="slot.icon"></ion-icon>
+              </div>
+              <div>
+                <div class="slot-title">{{ slot.title }}</div>
+                <div class="slot-time-range mono-font">{{ slot.range }}</div>
+              </div>
+            </div>
+            <div class="slot-right">
+              <div class="slot-bar-track">
+                <div 
+                  class="slot-bar-fill" 
+                  [style.width.%]="slot.avg > 0 ? (slot.avg / 7) * 100 : 0">
+                </div>
+              </div>
+              <div class="slot-avg-val mono-font">
+                {{ slot.avg > 0 ? (slot.avg | number:'1.1-1') : '—' }}
+              </div>
+            </div>
+          </div>
+  
+          <div class="card-footer-info">
+            <span>Sleepiness Scale</span>
+            <span>1-7; Active–Near Sleeping</span>
+          </div>
+        </div>
+  
+        <div class="logs-count-card">
+          <span class="logs-label">Logs This Week</span>
+          <span class="logs-num mono-font">{{ totalWeekLogs }}</span>
+        </div>
+  
+      </ng-container>
+  
+  
+      <ng-container *ngIf="selectedSegment === 'day'">
+
+        <div class="date-stepper">
+          <button class="stepper-btn" (click)="changeDay(-1)">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <span class="stepper-label mono-font">{{ selectedDayLabel }}</span>
+          <button class="stepper-btn" (click)="changeDay(1)" [disabled]="isSelectedDayToday">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+  
+        <div class="day-logs-container" *ngIf="selectedDayLogs.length > 0; else unloggedDayTemplate">
+          <div class="checkin-history-card" *ngFor="let log of selectedDayLogs" (click)="openEditSleepinessModal(log)">
+            <div class="checkin-item-content">
+              <div class="checkin-left">
+                <div class="level-circle mono-font">{{ log.loggedValue }}</div>
+                <div class="checkin-text">
+                  <div class="checkin-time mono-font">{{ log.loggedAt | date:'h:mm a' }}</div>
+                  <div class="checkin-note-text" *ngIf="log.notes">{{ log.notes }}</div>
+                </div>
+              </div>
+              <button class="delete-btn" (click)="$event.stopPropagation(); deleteLog(log)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </button>
+            </div>
+          </div>
+          <p class="tap-edit-hint">TAP A LOG TO EDIT IT</p>
+        </div>
+  
+        <ng-template #unloggedDayTemplate>
+          <div class="day-empty-card">
+            <ion-icon name="flash-outline" class="empty-icon"></ion-icon>
+            <h3 class="empty-title">No Sleepiness Logged</h3>
+            <p class="empty-subtitle">Log how sleepy you feel anytime.</p>
+          </div>
+        </ng-template>
+  
+      </ng-container>
+  
+    </div>
+  </ion-content>
