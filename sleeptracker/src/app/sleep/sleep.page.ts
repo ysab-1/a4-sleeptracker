@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { SleepService } from '../services/sleep.service';
 import { OvernightSleepData } from '../data/overnight-sleep-data';
 import { LogSleepModalComponent } from '../modals/log-sleep-modal.component';
@@ -25,7 +26,8 @@ export class SleepPage implements OnInit {
 
   constructor(
     private sleepService: SleepService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private router: Router
   ) {
     addIcons({
       moonOutline,
@@ -60,6 +62,10 @@ export class SleepPage implements OnInit {
     } else {
       this.lastNightSleep = null;
     }
+  }
+
+  openSleepHistory() {
+    this.router.navigate(['/sleep/sleep-history']);
   }
 
   async openLogSleepModal() {

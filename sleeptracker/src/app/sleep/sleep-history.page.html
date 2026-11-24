@@ -1,0 +1,141 @@
+<ion-content [fullscreen]="true" class="sleep-data-content">
+    <div id="container">
+  
+      <div class="page-header">
+        <h1 class="page-title">Sleep Data</h1>
+        <button class="back-link" (click)="goBackToToday()">
+          <ion-icon name="chevron-back-outline"></ion-icon> Back to Today
+        </button>
+      </div>
+  
+      <div class="segment-container">
+        <button 
+          class="segment-btn" 
+          [class.active]="selectedSegment === 'week'" 
+          (click)="selectedSegment = 'week'">
+          Week
+        </button>
+        <button 
+          class="segment-btn" 
+          [class.active]="selectedSegment === 'day'" 
+          (click)="selectedSegment = 'day'">
+          Day
+        </button>
+      </div>
+  
+      <ng-container *ngIf="selectedSegment === 'week'">
+ 
+        <div class="date-stepper">
+          <button class="stepper-btn" (click)="changeWeek(-1)">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <span class="stepper-label mono-font">{{ weekRangeLabel }}</span>
+          <button class="stepper-btn" (click)="changeWeek(1)" [disabled]="isCurrentWeek">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+  
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <p class="section-eyebrow">NIGHTLY DURATION</p>
+              <div class="avg-value mono-font">
+                {{ weekLoggedCount > 0 ? (weekAverageHours | number:'1.1-1') + ' hrs' : '—' }}
+              </div>
+              <p class="avg-subtitle">Daily average</p>
+            </div>
+            <div class="nights-pill mono-font">
+              {{ weekLoggedCount }}/7 nights
+            </div>
+          </div>
+  
+          <div class="bar-chart-wrapper">
+            <div class="grid-lines">
+              <div class="grid-line" style="bottom: 80%;"><span>8h</span></div>
+              <div class="grid-line" style="bottom: 60%;"><span>6h</span></div>
+              <div class="grid-line" style="bottom: 40%;"><span>4h</span></div>
+            </div>
+  
+            <div class="bars-row">
+              <div class="bar-col" *ngFor="let day of weekDaysData">
+                <div class="bar-track">
+                  <div 
+                    class="bar-fill" 
+                    [class.empty]="day.hours === 0"
+                    [class.highlight]="day.isHighlight"
+                    [style.height.%]="day.hours > 0 ? getBarHeightPercent(day.hours) : 4">
+                  </div>
+                </div>
+                <span class="day-letter mono-font" [class.highlight-text]="day.isHighlight">
+                  {{ day.letter }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </ng-container>
+  
+      <ng-container *ngIf="selectedSegment === 'day'">
+        
+        <div class="date-stepper">
+          <button class="stepper-btn" (click)="changeDay(-1)">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+          <span class="stepper-label mono-font">{{ selectedDayLabel }}</span>
+          <button class="stepper-btn" (click)="changeDay(1)" [disabled]="isSelectedDayToday">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+  
+        <div class="day-detail-card" *ngIf="selectedDaySleep; else unloggedDayTemplate" (click)="openEditSleepModal(selectedDaySleep)">
+          <div class="card-top-row">
+            <div>
+              <p class="section-eyebrow">TOTAL SLEEP</p>
+              <div class="total-duration mono-font">{{ formatDuration(selectedDaySleep) }}</div>
+            </div>
+            <div class="mood-badge" *ngIf="getMood(selectedDaySleep) as mood">
+              <ion-icon [name]="getMoodIcon(mood)"></ion-icon> {{ mood }}
+            </div>
+          </div>
+  
+          <div class="inner-time-card">
+            <div class="time-block">
+              <span class="sub-label">BEDTIME</span>
+              <span class="time-val mono-font">{{ selectedDaySleep.sleepStart | date:'h:mm a' }}</span>
+            </div>
+            <div class="time-divider"></div>
+            <div class="time-block">
+              <span class="sub-label">WAKE UP</span>
+              <span class="time-val mono-font">{{ selectedDaySleep.sleepEnd | date:'h:mm a' }}</span>
+            </div>
+          </div>
+  
+          <div class="awake-periods-list" *ngIf="getAwakePeriods(selectedDaySleep).length > 0">
+            <div class="awake-item" *ngFor="let period of getAwakePeriods(selectedDaySleep); let i = index">
+              <span class="yellow-dot"></span>
+              <span>
+                Awake period {{ i + 1 }}: {{ period.awakeTime | date:'h:mm a' }}–{{ period.asleepTime | date:'h:mm a' }}
+              </span>
+            </div>
+          </div>
+
+          <p class="sleep-note-quote" *ngIf="getNotes(selectedDaySleep) as note">
+            “{{ note }}”
+          </p>
+  
+          <div class="tap-to-edit-text">TAP TO EDIT</div>
+        </div>
+  
+        <ng-template #unloggedDayTemplate>
+          <div class="day-empty-card">
+            <ion-icon name="moon-outline" class="empty-moon-icon"></ion-icon>
+            <h3 class="empty-title">No Sleep Logged</h3>
+            <p class="empty-subtitle">There's no entry for this day.</p>
+          </div>
+        </ng-template>
+  
+      </ng-container>
+  
+    </div>
+  </ion-content>

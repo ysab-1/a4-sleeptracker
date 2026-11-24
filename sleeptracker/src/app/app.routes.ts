@@ -26,6 +26,15 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'sleep',
+    children: [
+      {
+        path: 'sleep-history',
+        loadComponent: () => import('./sleep/sleep-history.page').then(m => m.SleepHistoryPage)
+      }
+    ]
+  },
+  {
     path: '',
     redirectTo: 'tabs/home',
     pathMatch: 'full',

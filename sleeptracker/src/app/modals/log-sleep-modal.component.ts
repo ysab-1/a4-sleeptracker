@@ -69,7 +69,11 @@ export class LogSleepModalComponent {
     const start = new Date(this.bedtime);
     const end = new Date(this.wakeupTime);
 
-    const newSleep = new OvernightSleepData(start, end);
+    const newSleep: any = new OvernightSleepData(start, end);
+    newSleep.awakePeriods = this.awakePeriods;
+    newSleep.mood = this.selectedMood;
+    newSleep.notes = this.notes;
+
     this.modalCtrl.dismiss(newSleep);
   }
 }
