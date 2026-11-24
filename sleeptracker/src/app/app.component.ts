@@ -1,13 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { LocalNotifications } from '@capacitor/local-notifications'
+import { LocalNotifications } from '@capacitor/local-notifications';
+import { addIcons } from 'ionicons';
+import { moonOutline, home, flashOutline, moon, add, sunnyOutline } from 'ionicons/icons';
+
+addIcons({
+  'moon-outline': moonOutline,
+  'home': home,
+  'flash-outline': flashOutline,
+  'moon': moon,
+  'add': add,
+  'sunny-outline': sunnyOutline
+});
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   imports: [IonApp, IonRouterOutlet],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
