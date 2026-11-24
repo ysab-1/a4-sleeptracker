@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { SleepService } from '../services/sleep.service';
@@ -42,7 +42,8 @@ export class SleepHistoryPage implements OnInit {
   constructor(
     private sleepService: SleepService,
     private modalCtrl: ModalController,
-    private location: Location
+    private location: Location,
+    private cdr: ChangeDetectorRef
   ) {
     addIcons({
       chevronBackOutline,
@@ -69,6 +70,10 @@ export class SleepHistoryPage implements OnInit {
   refreshAllViews() {
     this.buildWeekData();
     this.loadSelectedDayData();
+
+    if (this.cdr) {
+      this.cdr.detectChanges();
+    }
   }
 
   getMonday(d: Date): Date {
@@ -101,9 +106,7 @@ export class SleepHistoryPage implements OnInit {
 
   buildWeekData() {
     const letters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    const allOvernight = SleepService.AllSleepData.filter(
-      e => e instanceof OvernightSleepData
-    ) as OvernightSleepData[];
+    const allOvernight = SleepService.AllOvernightData || [];
 
     const days: DayBar[] = [];
     let totalHours = 0;
@@ -114,9 +117,10 @@ export class SleepHistoryPage implements OnInit {
       dayDate.setDate(dayDate.getDate() + i);
       const dayStr = dayDate.toDateString();
 
-      const matchingLogs = allOvernight.filter(
-        log => new Date(log.sleepEnd).toDateString() === dayStr
-      );
+      const matchingLogs = allOvernight.filter(log => {
+        if (!log.sleepEnd) return false;
+        return new Date(log.sleepEnd).toDateString() === dayStr;
+      });
 
       let hoursForDay = 0;
       if (matchingLogs.length > 0) {
@@ -170,14 +174,15 @@ export class SleepHistoryPage implements OnInit {
   }
 
   loadSelectedDayData() {
-    const allOvernight = SleepService.AllSleepData.filter(
-      e => e instanceof OvernightSleepData
-    ) as OvernightSleepData[];
+    const allOvernight = SleepService.AllOvernightData || [];
 
     const targetStr = this.selectedDate.toDateString();
-    const matches = allOvernight.filter(
-      log => new Date(log.sleepEnd).toDateString() === targetStr
-    );
+    
+    const matches = allOvernight.filter(log => {
+      const startDate = new Date(log.sleepStart).toDateString();
+      const endDate = new Date(log.sleepEnd).toDateString();
+      return startDate === targetStr || endDate === targetStr;
+    });
 
     this.selectedDaySleep = matches.length > 0 ? matches[0] : null;
   }
@@ -214,9 +219,25 @@ export class SleepHistoryPage implements OnInit {
       componentProps: { existingData: sleepEntry }
     });
     await modal.present();
+    
     const { data } = await modal.onDidDismiss();
+    
     if (data) {
+      const updatedLog = data.updated || data;
+
+      if (updatedLog) {
+        const index = SleepService.AllOvernightData.indexOf(sleepEntry);
+
+        if (index > -1) {
+          SleepService.AllOvernightData[index] = updatedLog;
+        } else {
+          SleepService.AllOvernightData.push(updatedLog);
+        }
+      }
+
       this.refreshAllViews();
+      
+      this.cdr.detectChanges();
     }
   }
 }
